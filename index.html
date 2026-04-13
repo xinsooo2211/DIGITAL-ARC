@@ -32,7 +32,7 @@
         .scanline {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%),
-                        linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 255, 0, 0.02));
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
             background-size: 100% 3px, 3px 100%; z-index: 500; pointer-events: none; opacity: 0.5;
         }
 
@@ -128,7 +128,7 @@
     <div class="system-footer">
         <div><span class="status-dot"></span> ACTIVE</div>
         <div>ARCHITECT: ABUBAKAR // BSIT</div>
-        <div>ID: ARC-SYS-2026</div>
+        <div>ZPPSU // PORTFOLIO_V2</div>
     </div>
 
     <div class="container">
@@ -162,12 +162,12 @@
             </div>
 
             <form id="orderForm" onsubmit="handleForm(event)">
-                <input type="text" id="from_name" placeholder="YOUR NAME / CLIENT" required>
+                <input type="text" id="from_name" placeholder="CLIENT NAME" required>
                 <input type="email" id="reply_to" placeholder="EMAIL ADDRESS" required>
                 
                 <select id="package_tier" onchange="updateUI()">
-                    <option value="standard">Standard Protocol</option>
-                    <option value="pro">Advanced Protocol</option>
+                    <option value="standard" data-price="250">Standard Protocol — ₱250</option>
+                    <option value="pro" data-price="500">Advanced Protocol — ₱500</option>
                 </select>
                 <p id="tier-description" class="tier-desc"></p>
 
@@ -177,7 +177,7 @@
                     <option value="corporate">Professional / Corporate</option>
                 </select>
 
-                <textarea id="project_notes" placeholder="VISUAL DIRECTION: Describe colors, specific features, or special requests..."></textarea>
+                <textarea id="project_notes" placeholder="SPECIFICATIONS: Describe your required features or design style..."></textarea>
                 <input type="tel" id="gcash_num" placeholder="GCASH NUMBER (11 DIGITS)" pattern="[0-9]{11}" required>
 
                 <div style="font-size: 1.5rem; margin: 15px 0; font-weight: bold; letter-spacing: 2px;">
@@ -226,7 +226,6 @@
                         'Source File (PPTX) + PDF Export'
                     ] 
                 },
-                price: { standard: '250', pro: '500' },
                 desc: { 
                     standard: 'Professional visual structure for reports and academic tasks.', 
                     pro: 'Premium visual architecture for high-stakes defenses and business pitches.' 
@@ -248,7 +247,6 @@
                         'System Engineering & Deployment'
                     ] 
                 },
-                price: { standard: '250', pro: '500' },
                 desc: { 
                     standard: 'Functional registry and tracking systems built with structured SQL.', 
                     pro: 'Complex system engineering including multiple modules and cloud database sync.' 
@@ -273,8 +271,9 @@
 
         function updateUI() {
             const s = data[currentSvc];
-            const tier = document.getElementById('package_tier').value;
-            const price = s.price[tier];
+            const tierObj = document.getElementById('package_tier');
+            const tier = tierObj.value;
+            const price = tierObj.options[tierObj.selectedIndex].getAttribute('data-price');
             
             document.getElementById('modal-title').innerText = currentSvc === 'ppt' ? 'Visual Architecture' : 'System Engineering';
             document.getElementById('modal-title').style.color = s.color;
