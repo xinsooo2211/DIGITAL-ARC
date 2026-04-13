@@ -125,7 +125,7 @@
     <div class="scanline"></div>
 
     <div class="system-footer">
-        <div><span class="status-dot"></span> ONLINE</div>
+        <div><span class="status-dot"></span> ACTIVE</div>
         <div>WEBDEV: ABUBAKAR // BSIT</div>
         <div>STUDENT AT ZPPSU</div>
     </div>
@@ -199,7 +199,7 @@
                 </div>
                 <p style="opacity: 0.5; font-size: 0.7rem; text-align: center; margin-bottom: 15px;">SCAN TO PAY DEPOSIT</p>
                 
-                <a href="https://m.me/61587460312431?text=Hi Abubakar! I just submitted a commission request for Digital Arc." 
+                <a id="manual-messenger-btn" href="https://m.me/61587460312431?text=Hi Abubakar! I just submitted a commission request for Digital Arc." 
                    target="_blank" 
                    class="btn-action" 
                    style="width: 100%; text-align: center; background: #00F3FF; color: #000; border: none; font-weight: bold;">
@@ -282,6 +282,8 @@
             btn.innerText = "TRANSMITTING...";
             btn.disabled = true;
 
+            const fbChatLink = "https://m.me/61587460312431?text=Hi Abubakar! I just submitted a commission request for Digital Arc.";
+
             emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
                 service_type: currentSvc.toUpperCase(),
                 from_name: document.getElementById('from_name').value,
@@ -292,12 +294,22 @@
                 gcash_num: document.getElementById('gcash_num').value,
                 total_price: document.getElementById('total-price').innerText
             }).then(() => {
+                // HIDE FORM AND SHOW SUCCESS
                 document.getElementById('modal-content-wrapper').style.display = 'none';
                 document.getElementById('success-msg').style.display = 'flex';
-                btn.disabled = false; btn.innerText = "Transmit Request";
-            }).catch(() => {
+                btn.disabled = false; 
+                btn.innerText = "Transmit Request";
+
+                // AUTO REDIRECT: Attempt to open the chat directly
+                // Note: Some mobile browsers block popups unless clicked, 
+                // but we trigger it here as the handshake finalization.
+                window.open(fbChatLink, '_blank');
+
+            }).catch((err) => {
+                console.error("EmailJS Error:", err);
                 alert("Transmission error. Check your connection.");
                 btn.disabled = false;
+                btn.innerText = "Transmit Request";
             });
         }
     </script>
