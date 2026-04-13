@@ -199,7 +199,7 @@
                 </div>
                 <p style="opacity: 0.5; font-size: 0.7rem; text-align: center; margin-bottom: 15px;">SCAN TO PAY DEPOSIT</p>
                 
-                <a id="manual-messenger-btn" href="https://www.facebook.com/messages/e2ee/t/937239188878474" 
+                <a id="manual-messenger-btn" href="https://m.me/61587460312431" 
                    target="_blank" 
                    class="btn-action" 
                    style="width: 100%; text-align: center; background: #00F3FF; color: #000; border: none; font-weight: bold;">
@@ -282,8 +282,8 @@
             btn.innerText = "TRANSMITTING...";
             btn.disabled = true;
 
-            // Updated Direct Encrypted Chat Link
-            const fbChatLink = "https://www.facebook.com/messages/e2ee/t/937239188878474";
+            // Using the most reliable Messenger handshake link
+            const fbChatLink = "https://m.me/61587460312431";
 
             emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
                 service_type: currentSvc.toUpperCase(),
@@ -295,17 +295,18 @@
                 gcash_num: document.getElementById('gcash_num').value,
                 total_price: document.getElementById('total-price').innerText
             }).then(() => {
-                // HIDE FORM AND SHOW SUCCESS
                 document.getElementById('modal-content-wrapper').style.display = 'none';
                 document.getElementById('success-msg').style.display = 'flex';
                 btn.disabled = false; 
                 btn.innerText = "Transmit Request";
 
-                // AUTO REDIRECT: Attempt to open your direct chat
-                window.open(fbChatLink, '_blank');
+                // 1.5s delay so they can see the QR code before the redirect attempt
+                setTimeout(() => {
+                    window.open(fbChatLink, '_blank');
+                }, 1500);
 
             }).catch((err) => {
-                console.error("EmailJS Error:", err);
+                console.error("Transmission Error:", err);
                 alert("Transmission error. Check your connection.");
                 btn.disabled = false;
                 btn.innerText = "Transmit Request";
