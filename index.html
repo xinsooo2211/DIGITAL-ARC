@@ -81,11 +81,9 @@
             overflow: hidden;
         }
  
-        /* Hover tints */
         .ppt-studio:hover { background: rgba(184, 134, 11, 0.04); }
         .tech-forge:hover { background: rgba(26, 107, 181, 0.04); }
  
-        /* Decorative corner numbers */
         .section::before {
             content: attr(data-num);
             position: absolute;
@@ -94,7 +92,6 @@
             color: #ddd; font-weight: 400;
         }
  
-        /* Vertical rule between sections */
         .v-rule {
             width: 1px;
             background: #ebebeb;
@@ -167,7 +164,6 @@
         }
         .archive-link:hover { color: #888; border-color: #999; }
  
-        /* Corner badge */
         .corner-badge {
             position: absolute;
             top: 16px; right: 18px;
@@ -314,7 +310,7 @@
             color: #111;
         }
  
-        #main-submit {
+        #main-submit, #verify-btn {
             width: 100%;
             background: #111;
             color: #fff;
@@ -328,9 +324,30 @@
             border-radius: 2px;
             transition: background 0.2s, transform 0.1s;
         }
-        #main-submit:hover:not(:disabled) { background: #333; }
-        #main-submit:active { transform: scale(0.99); }
+        #main-submit:hover:not(:disabled), #verify-btn:hover { background: #333; }
+        #main-submit:active, #verify-btn:active { transform: scale(0.99); }
         #main-submit:disabled { opacity: 0.45; cursor: default; }
+
+        /* Verification Styling */
+        #verification-area {
+            display: none;
+            background: #fffdf5;
+            border: 1px solid #f2e8c9;
+            padding: 20px;
+            margin-bottom: 14px;
+            border-radius: 2px;
+            text-align: center;
+            animation: slideIn 0.3s ease-out;
+        }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .otp-input {
+            letter-spacing: 8px;
+            font-size: 20px;
+            text-align: center;
+            font-weight: 500;
+            margin-top: 10px;
+        }
  
         /* --- SUCCESS --- */
         #success-msg {
@@ -403,14 +420,12 @@
 </head>
 <body>
  
-    <!-- TOP BAR -->
     <div class="sys-bar">
         <div><span class="live-dot"></span>Online</div>
         <div>Digital Arc · V2.0 Pro</div>
         <div>WEBDEV: Abubakar</div>
     </div>
  
-    <!-- SPLIT LAYOUT -->
     <div class="container">
         <section class="section ppt-studio" data-num="01">
             <div class="corner-badge">Visual</div>
@@ -433,14 +448,12 @@
         </section>
     </div>
  
-    <!-- TICKER -->
     <div class="ticker">
         <div class="ticker-content">
             — Latest: "Clean SQL optimization" · Client_88 — "Thesis deck was amazing" · Student_01 — GCash Active — Portfolio V2.0 Loaded — Uptime 99.9% — System Ready —&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         </div>
     </div>
  
-    <!-- MODAL -->
     <div id="modal-overlay">
         <div class="modal">
             <button onclick="closeModal()" class="modal-close">✕ Close</button>
@@ -469,13 +482,21 @@
  
                     <label class="field-label">GCash Number</label>
                     <input type="tel" id="gcash_num" placeholder="09XXXXXXXXX" pattern="[0-9]{11}" required>
+
+                    <div id="verification-area">
+                        <label class="field-label" style="color:#b8860b">Verification Required</label>
+                        <p style="font-size: 10px; color: #888; margin-bottom: 5px;">A code has been generated for your session.</p>
+                        <div id="generated-code-display" style="font-weight: bold; font-size: 14px; color: #111; letter-spacing: 2px; margin-bottom: 10px; border: 1px dashed #ddd; padding: 5px; display: inline-block;">000000</div>
+                        <input type="text" id="otp_input" class="otp-input" placeholder="Enter Code" maxlength="6">
+                    </div>
  
                     <div class="price-row">
                         <span class="price-label">Total</span>
                         <span id="total-price">₱250</span>
                     </div>
  
-                    <button type="submit" id="main-submit">Transmit Request</button>
+                    <button type="button" id="verify-btn" onclick="triggerVerification()">Verify Number</button>
+                    <button type="submit" id="main-submit" style="display:none;">Transmit Request</button>
                 </form>
             </div>
  
@@ -502,6 +523,7 @@
         const EMAILJS_SERVICE_ID = "service_50mw7el";
         const EMAILJS_TEMPLATE_ID = "template_f1i8toh";
         let currentSvc = 'ppt';
+        let generatedOTP = "";
  
         (function() { emailjs.init(EMAILJS_PUBLIC_KEY); })();
  
@@ -526,8 +548,14 @@
             document.getElementById('modal-overlay').style.display = 'flex';
             document.getElementById('modal-content-wrapper').style.display = 'block';
             document.getElementById('success-msg').style.display = 'none';
+            
+            // Reset verification UI
+            document.getElementById('verification-area').style.display = 'none';
+            document.getElementById('verify-btn').style.display = 'block';
+            document.getElementById('main-submit').style.display = 'none';
             document.getElementById('main-submit').disabled = false;
             document.getElementById('main-submit').textContent = 'Transmit Request';
+            
             document.getElementById('modal-title').textContent = svc === 'ppt' ? 'PPT Studio' : 'Tech Forge';
             document.getElementById('eta-text').textContent = svc === 'ppt'
                 ? 'ETA: 2–3 Business Days'
@@ -539,7 +567,6 @@
             document.getElementById('modal-overlay').style.display = 'none';
         }
  
-        // Close on backdrop click
         document.getElementById('modal-overlay').addEventListener('click', function(e) {
             if (e.target === this) closeModal();
         });
@@ -553,9 +580,38 @@
             const price = sel.options[sel.selectedIndex].getAttribute('data-price');
             document.getElementById('total-price').textContent = '₱' + price;
         }
+
+        // VERIFICATION LOGIC
+        function triggerVerification() {
+            const phone = document.getElementById('gcash_num').value;
+            if (phone.length !== 11) {
+                alert("Please enter a valid 11-digit GCash number.");
+                return;
+            }
+
+            playBeep();
+            // Generate random 6-digit code
+            generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
+            
+            // Show verification area
+            document.getElementById('generated-code-display').textContent = generatedOTP;
+            document.getElementById('verification-area').style.display = 'block';
+            document.getElementById('verify-btn').style.display = 'none';
+            document.getElementById('main-submit').style.display = 'block';
+            
+            alert("SECURITY: Check the terminal display for your verification code.");
+        }
  
         function handleForm(e) {
             e.preventDefault();
+            
+            // Validate OTP
+            const userOTP = document.getElementById('otp_input').value;
+            if (userOTP !== generatedOTP) {
+                alert("INVALID_CODE: Access denied. Please enter the correct verification code.");
+                return;
+            }
+
             playBeep();
             const btn = document.getElementById('main-submit');
             btn.textContent = 'Transmitting...';
@@ -568,7 +624,8 @@
                 package_tier: document.getElementById('package_tier').value,
                 project_notes: document.getElementById('project_notes').value,
                 gcash_num: document.getElementById('gcash_num').value,
-                total_price: document.getElementById('total-price').textContent
+                total_price: document.getElementById('total-price').textContent,
+                status: "VERIFIED_SESSION"
             }).then(() => {
                 document.getElementById('modal-content-wrapper').style.display = 'none';
                 document.getElementById('success-msg').style.display = 'flex';
