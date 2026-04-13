@@ -6,7 +6,7 @@
     <title>DIGITAL ARC | DUAL PROTOCOL</title>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <style>
-        /* --- CORE STYLING --- */
+        /* --- MOBILE-FIRST CORE STYLING --- */
         * { margin: 0; padding: 0; box-sizing: border-box; cursor: crosshair; -webkit-tap-highlight-color: transparent; }
         body, html { 
             height: 100%; 
@@ -32,7 +32,7 @@
         .scanline {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%),
-                        linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 255, 0, 0.02));
             background-size: 100% 3px, 3px 100%; z-index: 500; pointer-events: none; opacity: 0.5;
         }
 
@@ -92,7 +92,7 @@
         }
 
         .deliverables-box { background: rgba(255,255,255,0.03); padding: 15px; margin-bottom: 20px; border-left: 2px solid; }
-        .deliverables-box h4 { font-size: 10px; letter-spacing: 2px; color: rgba(255,255,255,0.3); margin-bottom: 10px; text-transform: uppercase; }
+        .deliverables-box h4 { font-size: 10px; letter-spacing: 2px; color: rgba(255,255,255,0.3); margin-bottom: 8px; text-transform: uppercase; }
         .deliverables-box li { list-style: none; margin-bottom: 5px; font-size: 0.8rem; opacity: 0.7; }
 
         input, select, textarea { 
@@ -101,7 +101,7 @@
         }
         textarea { height: 80px; }
         
-        .tier-desc { font-size: 0.7rem; color: #888; margin-top: -5px; margin-bottom: 15px; }
+        .tier-desc { font-size: 0.7rem; color: #888; margin-top: -5px; margin-bottom: 15px; line-height: 1.4; }
 
         /* --- SUCCESS & QR --- */
         #success-msg {
@@ -120,15 +120,15 @@
 
     <div id="boot-screen">
         <div class="boot-loader"></div>
-        <p style="letter-spacing: 5px; font-size: 10px; opacity: 0.5;">INITIALIZING DIGITAL ARC</p>
+        <p style="letter-spacing: 5px; font-size: 10px; opacity: 0.5;">INITIALIZING DIGITAL_ARC</p>
     </div>
 
     <div class="scanline"></div>
 
     <div class="system-footer">
         <div><span class="status-dot"></span> ACTIVE</div>
-        <div>WEBDEV: ABUBAKAR // BSIT</div>
-        <div>STUDENT AT ZPPSU/div>
+        <div>ARCHITECT: ABUBAKAR // BSIT</div>
+        <div>ID: ARC-SYS-2026</div>
     </div>
 
     <div class="container">
@@ -147,13 +147,13 @@
 
     <div class="ticker">
         <div class="ticker-content">
-            // SQL_STATUS: CONNECTED // PHP_ENGINE: OPTIMIZED // MONGODB_CLUSTER: ACTIVE // UI/UX_PROTOCOL: ENGAGED // ENROLLMENT_MODULE: READY...
+            // SQL_STATUS: CONNECTED // PHP_ENGINE: OPTIMIZED // MONGODB_CLUSTER: ACTIVE // ENROLLMENT_MODULE: READY // UI/UX_PROTOCOL: ENGAGED //
         </div>
     </div>
 
     <div id="modal-overlay">
         <div class="modal">
-            <button onclick="closeModal()" style="position:absolute; top:15px; right:15px; background:none; border:none; color:#fff; font-size:2rem; opacity:0.3;">&times;</button>
+            <button onclick="closeModal()" style="position:absolute; top:15px; right:15px; background:none; border:none; color:#fff; font-size:2rem; opacity:0.3; cursor:pointer;">&times;</button>
             <h2 id="modal-title" style="letter-spacing: 3px; font-weight: 100; margin-bottom: 15px; text-transform: uppercase;">MODULE</h2>
             
             <div id="details" class="deliverables-box">
@@ -162,12 +162,12 @@
             </div>
 
             <form id="orderForm" onsubmit="handleForm(event)">
-                <input type="text" id="from_name" placeholder="CLIENT NAME / BRAND" required>
+                <input type="text" id="from_name" placeholder="YOUR NAME / CLIENT" required>
                 <input type="email" id="reply_to" placeholder="EMAIL ADDRESS" required>
                 
                 <select id="package_tier" onchange="updateUI()">
                     <option value="standard">Standard Protocol</option>
-                    <option value="pro">Advanced Protocol (Full System)</option>
+                    <option value="pro">Advanced Protocol</option>
                 </select>
                 <p id="tier-description" class="tier-desc"></p>
 
@@ -177,23 +177,23 @@
                     <option value="corporate">Professional / Corporate</option>
                 </select>
 
-                <textarea id="project_notes" placeholder="SPECIFICATIONS: Describe your required features or design style..."></textarea>
+                <textarea id="project_notes" placeholder="VISUAL DIRECTION: Describe colors, specific features, or special requests..."></textarea>
                 <input type="tel" id="gcash_num" placeholder="GCASH NUMBER (11 DIGITS)" pattern="[0-9]{11}" required>
 
-                <div style="font-size: 1.2rem; margin: 15px 0; font-weight: bold; color: #888;">
-                    ESTIMATED TOTAL: <span id="total-price" style="color:#fff;">₱0</span>
+                <div style="font-size: 1.5rem; margin: 15px 0; font-weight: bold; letter-spacing: 2px;">
+                    TOTAL: <span id="total-price">₱0</span>
                 </div>
 
                 <button type="submit" id="main-submit" class="btn-action" style="width: 100%; border-width: 2px; background: #fff; color: #000;">Transmit Request</button>
             </form>
 
             <div id="success-msg">
-                <h2 id="success-header">COMPLETE</h2>
+                <h2 id="success-header">HANDSHAKE_COMPLETE</h2>
                 <div class="qr-placeholder">
-                    <img src="https://via.placeholder.com/180?text=SCAN+TO+PAY" alt="GCash QR" style="width:100%">
+                    <img src="https://via.placeholder.com/180?text=SCAN+GCASH" alt="GCash QR" style="width:100%">
                 </div>
                 <p style="opacity: 0.5; font-size: 0.7rem; text-align: center; margin-bottom: 15px;">SCAN TO PAY DEPOSIT</p>
-                <a href="https://m.me/YOUR_FB_LINK" class="btn-action" style="width: 100%; text-align: center; background: #00F3FF; color: #000; border: none;">Message Abubakar</a>
+                <a href="https://m.me/YOUR_FB_LINK" target="_blank" class="btn-action" style="width: 100%; text-align: center; background: #00F3FF; color: #000; border: none;">Message Abubakar</a>
             </div>
         </div>
     </div>
@@ -213,20 +213,46 @@
             ppt: { 
                 color: '#D4AF37', 
                 list: { 
-                    standard: ['10-15 Visual Slides', 'Custom Infographics', 'Data Charts Integration', 'Standard Layout'], 
-                    pro: ['Full Thesis/Pitch Deck', 'Custom Graphic Assets', 'Source Files (PPTX/PDF)', 'High-End Animations'] 
+                    standard: [
+                        '10-15 Visual Slides', 
+                        'Custom Graphic Elements', 
+                        'Infographic Integration', 
+                        'Clean Layout Design'
+                    ], 
+                    pro: [
+                        'Full Thesis Defense Deck', 
+                        'Pitch Deck Architecture', 
+                        'Custom Animations/Transitions', 
+                        'Source File (PPTX) + PDF Export'
+                    ] 
                 },
                 price: { standard: '250', pro: '500' },
-                desc: { standard: 'Clean visual structure for reports and academic tasks.', pro: 'Advanced visual architecture for high-stakes presentations.' }
+                desc: { 
+                    standard: 'Professional visual structure for reports and academic tasks.', 
+                    pro: 'Premium visual architecture for high-stakes defenses and business pitches.' 
+                }
             },
             tech: { 
                 color: '#00F3FF', 
                 list: { 
-                    standard: ['PHP/MySQL CRUD System', 'Student Registry Module', 'Mobile Responsive UI', 'Basic Database Setup'], 
-                    pro: ['Online Enrollment System', 'Full Admin Dashboard', 'NoSQL Integration (MongoDB)', 'Custom Web System Build'] 
+                    standard: [
+                        'PHP / MySQL CRUD System', 
+                        'Student Registry Module', 
+                        'Database Connection Setup', 
+                        'Mobile Responsive Interface'
+                    ], 
+                    pro: [
+                        'Online Enrollment System', 
+                        'Full Admin Dashboard', 
+                        'NoSQL Integration (MongoDB)', 
+                        'System Engineering & Deployment'
+                    ] 
                 },
                 price: { standard: '250', pro: '500' },
-                desc: { standard: 'Functional database systems for small-scale registry/tracking.', pro: 'Complex system engineering with multiple modules and secure backend.' }
+                desc: { 
+                    standard: 'Functional registry and tracking systems built with structured SQL.', 
+                    pro: 'Complex system engineering including multiple modules and cloud database sync.' 
+                }
             }
         };
 
