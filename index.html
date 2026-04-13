@@ -3,207 +3,158 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>DIGITAL ARC | DUAL PROTOCOL</title>
+    <title>DIGITAL ARC | V2.0 PRO</title>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <style>
         /* --- CORE STYLING --- */
-        * { margin: 0; padding: 0; box-sizing: border-box; cursor: crosshair; -webkit-tap-highlight-color: transparent; }
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: crosshair; }
         body, html { 
-            height: 100%; 
-            background: #000; 
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
-            overflow: hidden; 
-            color: #fff; 
+            height: 100%; background: #000; color: #fff;
+            font-family: 'Courier New', Courier, monospace; overflow: hidden; 
         }
-
-        /* --- SYSTEM INITIALIZATION --- */
-        #boot-screen {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #000; z-index: 1000; display: flex; flex-direction: column;
-            justify-content: center; align-items: center; text-align: center;
-        }
-        .boot-loader {
-            width: 40px; height: 40px; border: 2px solid #333; border-top-color: #00F3FF;
-            border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
 
         /* --- UI OVERLAYS --- */
         .scanline {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%),
-                        linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
-            background-size: 100% 3px, 3px 100%; z-index: 500; pointer-events: none; opacity: 0.5;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%);
+            background-size: 100% 4px; z-index: 500; pointer-events: none; opacity: 0.15;
         }
 
         .system-footer {
             position: fixed; bottom: 35px; width: 100%; display: flex; 
             justify-content: space-between; padding: 0 20px; z-index: 150;
-            font-size: 8px; letter-spacing: 1px; text-transform: uppercase; color: rgba(255,255,255,0.4);
-        }
-
-        .status-dot {
-            height: 6px; width: 6px; background-color: #00ff00; border-radius: 50%;
-            display: inline-block; margin-right: 6px; box-shadow: 0 0 8px #00ff00;
+            font-size: 8px; letter-spacing: 1px; color: rgba(0, 243, 255, 0.5);
         }
 
         /* --- SPLIT UI --- */
         .container { display: flex; width: 100%; height: 100vh; flex-direction: row; }
-        
-        @media (max-width: 768px) {
-            .container { flex-direction: column; }
-            .section { width: 100%; flex: 1 !important; }
-            .system-footer { flex-direction: column; align-items: center; gap: 5px; text-align: center; bottom: 45px; }
-        }
+        @media (max-width: 768px) { .container { flex-direction: column; } }
 
         .section {
             flex: 1; display: flex; flex-direction: column; justify-content: center;
-            align-items: center; transition: all 0.5s ease;
-            position: relative; padding: 20px;
+            align-items: center; position: relative; padding: 20px; transition: 0.5s;
+            border: 1px solid rgba(255,255,255,0.05);
         }
         
-        .ppt-studio { background-color: #0a0a0a; border-bottom: 1px solid rgba(212, 175, 55, 0.1); }
-        .tech-forge { background-color: #0f0f0f; }
+        .ppt-studio:hover { background: rgba(212, 175, 55, 0.05); }
+        .tech-forge:hover { background: rgba(0, 243, 255, 0.05); }
 
-        h1 { font-size: clamp(2rem, 8vw, 4.5rem); font-weight: 100; letter-spacing: 10px; text-transform: uppercase; margin-bottom: 5px; text-align: center; }
+        .archive-link {
+            font-size: 10px; color: #888; text-decoration: underline; 
+            margin-top: 15px; cursor: pointer; letter-spacing: 2px;
+        }
+
+        h1 { font-size: clamp(1.5rem, 6vw, 4rem); letter-spacing: 8px; text-transform: uppercase; }
         .ppt-studio h1 { color: #D4AF37; }
         .tech-forge h1 { color: #00F3FF; }
 
-        .tagline { font-size: 0.6rem; letter-spacing: 3px; opacity: 0.4; text-transform: uppercase; margin-bottom: 20px; }
-
         .btn-action {
             background: transparent; border: 1px solid currentColor; color: inherit;
-            padding: 12px 30px; text-transform: uppercase; letter-spacing: 3px;
-            font-size: 10px; font-weight: bold; transition: 0.4s; cursor: pointer;
-            text-decoration: none; display: inline-block;
+            padding: 10px 25px; text-transform: uppercase; letter-spacing: 2px;
+            font-size: 10px; cursor: pointer; margin-top: 20px;
         }
-        .btn-action:active { background: #fff; color: #000; }
 
         /* --- MODAL --- */
         #modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.98); display: none; justify-content: center;
-            align-items: flex-start; z-index: 600; backdrop-filter: blur(15px);
-            overflow-y: auto; padding: 20px 0;
+            background: rgba(0,0,0,0.95); display: none; justify-content: center;
+            align-items: center; z-index: 600; backdrop-filter: blur(10px);
         }
         .modal { 
-            background: #111; border: 1px solid #222; width: 90%; max-width: 500px; 
-            padding: 30px 20px; position: relative; margin: auto;
+            background: #0a0a0a; border: 1px solid #333; width: 90%; max-width: 450px; 
+            padding: 25px; position: relative; box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
         }
-
-        .deliverables-box { background: rgba(255,255,255,0.03); padding: 15px; margin-bottom: 20px; border-left: 2px solid; }
-        .deliverables-box h4 { font-size: 10px; letter-spacing: 2px; color: rgba(255,255,255,0.3); margin-bottom: 8px; text-transform: uppercase; }
-        .deliverables-box li { list-style: none; margin-bottom: 5px; font-size: 0.8rem; opacity: 0.7; }
 
         input, select, textarea { 
-            width: 100%; background: #000; border: 1px solid #333; padding: 14px; 
-            color: #fff; margin-bottom: 10px; font-family: inherit; font-size: 16px;
+            width: 100%; background: #000; border: 1px solid #333; padding: 12px; 
+            color: #fff; margin-bottom: 10px; font-size: 14px;
         }
-        textarea { height: 80px; }
-        
-        .tier-desc { font-size: 0.7rem; color: #888; margin-top: -5px; margin-bottom: 15px; line-height: 1.4; }
+
+        .char-counter { font-size: 9px; text-align: right; color: #555; margin-top: -8px; margin-bottom: 10px; }
+        .eta-badge { font-size: 9px; color: #00ff00; margin-bottom: 10px; letter-spacing: 1px; }
 
         /* --- SUCCESS & QR --- */
-        #success-msg {
-            display: none; flex-direction: column; justify-content: center; align-items: center; padding: 20px;
-        }
-        .qr-placeholder { width: 180px; height: 180px; background: #fff; margin: 15px 0; padding: 10px; }
+        #success-msg { display: none; flex-direction: column; align-items: center; text-align: center; }
+        .qr-placeholder { width: 160px; height: 160px; background: #fff; margin: 15px 0; border: 4px solid #00F3FF; }
 
         /* --- TICKER --- */
-        .ticker { position: fixed; bottom: 0; width: 100%; background: #000; border-top: 1px solid #222; padding: 6px 0; z-index: 50; overflow: hidden; }
-        .ticker-content { display: inline-block; white-space: nowrap; font-size: 9px; color: #444; animation: scroll 30s linear infinite; }
+        .ticker { position: fixed; bottom: 0; width: 100%; background: #000; border-top: 1px solid #111; padding: 5px 0; overflow: hidden; }
+        .ticker-content { display: inline-block; white-space: nowrap; font-size: 9px; color: #333; animation: scroll 40s linear infinite; }
         @keyframes scroll { from { transform: translateX(100%); } to { transform: translateX(-100%); } }
     </style>
 </head>
 <body>
 
-    <div id="boot-screen">
-        <div class="boot-loader"></div>
-        <p style="letter-spacing: 5px; font-size: 10px; opacity: 0.5;">INITIALIZING DIGITAL_ARC</p>
-    </div>
-
     <div class="scanline"></div>
 
     <div class="system-footer">
-        <div><span class="status-dot"></span> ACTIVE</div>
-        <div>ARCHITECT: ABUBAKAR // BSIT</div>
-        <div>ZPPSU // PORTFOLIO_V2</div>
+        <div>STATUS: ONLINE</div>
+        <div>ARCHITECT: ABUBAKAR</div>
+        <div>Uptime: 99.9%</div>
     </div>
 
     <div class="container">
-        <section class="section ppt-studio" onclick="openModal('ppt')">
-            <p class="tagline">Visual Architecture</p>
+        <section class="section ppt-studio">
             <h1>PPT Studio</h1>
-            <button class="btn-action">Configure</button>
+            <p style="font-size: 9px; color: #888;">VISUAL ARCHITECTURE</p>
+            <button class="btn-action" onclick="openModal('ppt')">Configure</button>
+            <a href="YOUR_PORTFOLIO_LINK" target="_blank" class="archive-link" onclick="playBeep()">[VIEW_PREVIOUS_LOGS]</a>
         </section>
 
-        <section class="section tech-forge" onclick="openModal('tech')">
-            <p class="tagline">System Engineering</p>
+        <section class="section tech-forge">
             <h1>Tech Forge</h1>
-            <button class="btn-action">Initiate</button>
+            <p style="font-size: 9px; color: #888;">SYSTEM ENGINEERING</p>
+            <button class="btn-action" onclick="openModal('tech')">Initiate</button>
+            <a href="YOUR_PORTFOLIO_LINK" target="_blank" class="archive-link" onclick="playBeep()">[VIEW_SYSTEM_DEMOS]</a>
         </section>
     </div>
 
     <div class="ticker">
         <div class="ticker-content">
-            // SQL_STATUS: CONNECTED // PHP_ENGINE: OPTIMIZED // MONGODB_CLUSTER: ACTIVE // ENROLLMENT_MODULE: READY // UI/UX_PROTOCOL: ENGAGED //
+            // LATEST_FEEDBACK: "Clean SQL optimization" - Client_88 // SYSTEM_READY // LATEST_FEEDBACK: "Thesis deck was amazing" - Student_01 // GCASH_ACTIVE // PORTFOLIO_V2.0_LOADED //
         </div>
     </div>
 
     <div id="modal-overlay">
         <div class="modal">
-            <button onclick="closeModal()" style="position:absolute; top:15px; right:15px; background:none; border:none; color:#fff; font-size:2rem; opacity:0.3; cursor:pointer;">&times;</button>
+            <button onclick="closeModal()" style="position:absolute; top:10px; right:15px; background:none; border:none; color:#fff; cursor:pointer;">[X]</button>
             
             <div id="modal-content-wrapper">
-                <h2 id="modal-title" style="letter-spacing: 3px; font-weight: 100; margin-bottom: 15px; text-transform: uppercase;">MODULE</h2>
-                
-                <div id="details" class="deliverables-box">
-                    <h4>System Deliverables:</h4>
-                    <ul id="deliverables-list"></ul>
-                </div>
+                <h3 id="modal-title" style="margin-bottom: 5px;">MODULE</h3>
+                <div class="eta-badge" id="eta-text">ETA: 3-5 BUSINESS DAYS</div>
 
                 <form id="orderForm" onsubmit="handleForm(event)">
-                    <input type="text" id="from_name" placeholder="CLIENT NAME" required>
-                    <input type="email" id="reply_to" placeholder="EMAIL ADDRESS" required>
+                    <input type="text" id="from_name" placeholder="CLIENT_ID (NAME)" required>
+                    <input type="email" id="reply_to" placeholder="CONTACT_EMAIL" required>
                     
                     <select id="package_tier" onchange="updateUI()">
-                        <option value="standard" data-price="250">Standard Protocol — ₱250</option>
-                        <option value="pro" data-price="500">Advanced Protocol — ₱500</option>
-                    </select>
-                    <p id="tier-description" class="tier-desc"></p>
-
-                    <select id="style_type" required>
-                        <option value="minimalist">Minimalist / Clean</option>
-                        <option value="cyber">Cyberpunk / High-Tech</option>
-                        <option value="corporate">Professional / Corporate</option>
+                        <option value="standard" data-price="250">Standard Protocol - ₱250</option>
+                        <option value="pro" data-price="500">Advanced Protocol - ₱500</option>
                     </select>
 
-                    <textarea id="project_notes" placeholder="SPECIFICATIONS: Describe your required features or design style..."></textarea>
-                    <input type="tel" id="gcash_num" placeholder="GCASH NUMBER (11 DIGITS)" pattern="[0-9]{11}" required>
+                    <textarea id="project_notes" placeholder="SYSTEM_SPECS: Describe features..." oninput="countChars(this)"></textarea>
+                    <div class="char-counter"><span id="current">0</span>/500 CHARS</div>
 
-                    <div style="font-size: 1.5rem; margin: 15px 0; font-weight: bold; letter-spacing: 2px;">
-                        TOTAL: <span id="total-price">₱0</span>
+                    <input type="tel" id="gcash_num" placeholder="GCASH_MOBILE (11-DIGIT)" pattern="[0-9]{11}" required>
+
+                    <div style="font-size: 1.2rem; margin-bottom: 15px; color: #00F3FF;">
+                        TOTAL: <span id="total-price">₱250</span>
                     </div>
 
-                    <button type="submit" id="main-submit" class="btn-action" style="width: 100%; border-width: 2px; background: #fff; color: #000;">Transmit Request</button>
+                    <button type="submit" id="main-submit" class="btn-action" style="width: 100%; background: #00F3FF; color: #000;">Transmit Request</button>
                 </form>
             </div>
 
             <div id="success-msg">
-                <h2 id="success-header" style="color:#00ff00; letter-spacing: 2px;">HANDSHAKE_COMPLETE</h2>
-                <p style="text-align:center; padding: 10px; font-size: 0.8rem; opacity: 0.8;">
-                    System specs transmitted. Verification required.
-                </p>
+                <h2 style="color:#00ff00;">HANDSHAKE_COMPLETE</h2>
                 <div class="qr-placeholder">
-                    <img src="https://via.placeholder.com/180?text=SCAN+GCASH" alt="GCash QR" style="width:100%">
+                    <img src="YOUR_QR_IMAGE_URL" alt="GCash QR" style="width:100%">
                 </div>
-                <p style="opacity: 0.5; font-size: 0.7rem; text-align: center; margin-bottom: 15px;">SCAN TO PAY DEPOSIT</p>
+                <p style="font-size: 10px; color: #00F3FF; margin-bottom: 5px;">ACCOUNT: ABUBAKAR K.</p>
+                <p style="font-size: 9px; opacity: 0.6; margin-bottom: 15px;">SCAN TO PAY DEPOSIT</p>
                 
-                <a id="manual-messenger-btn" href="https://m.me/61587460312431" 
-                   target="_blank" 
-                   class="btn-action" 
-                   style="width: 100%; text-align: center; background: #00F3FF; color: #000; border: none; font-weight: bold;">
-                   Finalize via Messenger
+                <a id="manual-messenger-btn" href="https://m.me/61587460312431" target="_blank" class="btn-action" style="background: #00F3FF; color: #000; width: 100%; text-align: center;">
+                    Finalize via Messenger
                 </a>
             </div>
         </div>
@@ -216,98 +167,65 @@
 
         (function() { emailjs.init(EMAILJS_PUBLIC_KEY); })();
 
-        window.onload = () => {
-            setTimeout(() => { document.getElementById('boot-screen').style.display = 'none'; }, 1200);
-        };
-
-        const data = {
-            ppt: { 
-                color: '#D4AF37', 
-                list: { 
-                    standard: ['10-15 Visual Slides', 'Custom Graphic Elements', 'Infographic Integration', 'Clean Layout Design'], 
-                    pro: ['Full Thesis Defense Deck', 'Pitch Deck Architecture', 'Custom Animations/Transitions', 'Source File (PPTX) + PDF Export'] 
-                },
-                desc: { standard: 'Professional visual structure for reports and academic tasks.', pro: 'Premium visual architecture for high-stakes defenses and business pitches.' }
-            },
-            tech: { 
-                color: '#00F3FF', 
-                list: { 
-                    standard: ['PHP / MySQL CRUD System', 'Student Registry Module', 'Database Connection Setup', 'Mobile Responsive Interface'], 
-                    pro: ['Online Enrollment System', 'Full Admin Dashboard', 'NoSQL Integration (MongoDB)', 'System Engineering & Deployment'] 
-                },
-                desc: { standard: 'Functional registry and tracking systems built with structured SQL.', pro: 'Complex system engineering including multiple modules and cloud database sync.' }
-            }
-        };
-
-        let currentSvc = 'ppt';
+        // Audio Feedback
+        function playBeep() {
+            const context = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = context.createOscillator();
+            const gain = context.createGain();
+            osc.type = "square";
+            osc.frequency.setValueAtTime(800, context.currentTime);
+            gain.gain.setValueAtTime(0.1, context.currentTime);
+            osc.connect(gain);
+            gain.connect(context.destination);
+            osc.start();
+            osc.stop(context.currentTime + 0.1);
+        }
 
         function openModal(svc) {
+            playBeep();
             currentSvc = svc;
             document.getElementById('modal-overlay').style.display = 'flex';
             document.getElementById('modal-content-wrapper').style.display = 'block';
             document.getElementById('success-msg').style.display = 'none';
-            document.body.style.overflow = 'hidden';
+            document.getElementById('eta-text').innerText = svc === 'ppt' ? "ETA: 2-3 BUSINESS DAYS" : "ETA: 5-7 BUSINESS DAYS";
             updateUI();
         }
 
         function closeModal() {
             document.getElementById('modal-overlay').style.display = 'none';
-            document.body.style.overflow = 'auto';
+        }
+
+        function countChars(obj) {
+            document.getElementById('current').innerText = obj.value.length;
         }
 
         function updateUI() {
-            const s = data[currentSvc];
             const tierObj = document.getElementById('package_tier');
-            const tier = tierObj.value;
             const price = tierObj.options[tierObj.selectedIndex].getAttribute('data-price');
-            
-            document.getElementById('modal-title').innerText = currentSvc === 'ppt' ? 'Visual Architecture' : 'System Engineering';
-            document.getElementById('modal-title').style.color = s.color;
             document.getElementById('total-price').innerText = `₱${price}`;
-            document.getElementById('details').style.borderLeftColor = s.color;
-            document.getElementById('tier-description').innerText = s.desc[tier];
-            
-            const list = document.getElementById('deliverables-list');
-            list.innerHTML = '';
-            s.list[tier].forEach(item => {
-                const li = document.createElement('li');
-                li.innerText = `> ${item}`;
-                list.appendChild(li);
-            });
         }
 
         function handleForm(e) {
             e.preventDefault();
+            playBeep();
             const btn = document.getElementById('main-submit');
             btn.innerText = "TRANSMITTING...";
             btn.disabled = true;
-
-            // Using the most reliable Messenger handshake link
-            const fbChatLink = "https://m.me/61587460312431";
 
             emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
                 service_type: currentSvc.toUpperCase(),
                 from_name: document.getElementById('from_name').value,
                 reply_to: document.getElementById('reply_to').value,
                 package_tier: document.getElementById('package_tier').value,
-                visual_style: document.getElementById('style_type').value,
-                project_notes: document.getElementById('project_notes').value || "None provided",
+                project_notes: document.getElementById('project_notes').value,
                 gcash_num: document.getElementById('gcash_num').value,
                 total_price: document.getElementById('total-price').innerText
             }).then(() => {
                 document.getElementById('modal-content-wrapper').style.display = 'none';
                 document.getElementById('success-msg').style.display = 'flex';
-                btn.disabled = false; 
-                btn.innerText = "Transmit Request";
-
-                // 1.5s delay so they can see the QR code before the redirect attempt
-                setTimeout(() => {
-                    window.open(fbChatLink, '_blank');
-                }, 1500);
-
-            }).catch((err) => {
-                console.error("Transmission Error:", err);
-                alert("Transmission error. Check your connection.");
+                setTimeout(() => { window.open("https://m.me/61587460312431", '_blank'); }, 2000);
+            }).catch(() => {
+                alert("HANDSHAKE_FAILED. Check Connection.");
                 btn.disabled = false;
                 btn.innerText = "Transmit Request";
             });
