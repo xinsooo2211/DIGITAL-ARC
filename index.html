@@ -119,15 +119,15 @@
 
     <div id="boot-screen">
         <div class="boot-loader"></div>
-        <p style="letter-spacing: 5px; font-size: 10px; opacity: 0.5;">INITIALIZING DIGITAL ARC</p>
+        <p style="letter-spacing: 5px; font-size: 10px; opacity: 0.5;">INITIALIZING DIGITAL_ARC</p>
     </div>
 
     <div class="scanline"></div>
 
     <div class="system-footer">
         <div><span class="status-dot"></span> ACTIVE</div>
-        <div>WEBDEV: ABUBAKAR // BSIT</div>
-        <div>STUDENT AT ZPPSU</div>
+        <div>ARCHITECT: ABUBAKAR // BSIT</div>
+        <div>ZPPSU // PORTFOLIO_V2</div>
     </div>
 
     <div class="container">
@@ -190,7 +190,7 @@
             </div>
 
             <div id="success-msg">
-                <h2 id="success-header" style="color:#00ff00; letter-spacing: 2px;">COMPLETE</h2>
+                <h2 id="success-header" style="color:#00ff00; letter-spacing: 2px;">HANDSHAKE_COMPLETE</h2>
                 <p style="text-align:center; padding: 10px; font-size: 0.8rem; opacity: 0.8;">
                     System specs transmitted. Verification required.
                 </p>
@@ -199,7 +199,7 @@
                 </div>
                 <p style="opacity: 0.5; font-size: 0.7rem; text-align: center; margin-bottom: 15px;">SCAN TO PAY DEPOSIT</p>
                 
-                <a id="manual-messenger-btn" href="https://m.me/61587460312431?text=Hi Abubakar! I just submitted a commission request for Digital Arc." 
+                <a id="manual-messenger-btn" href="https://www.facebook.com/messages/e2ee/t/937239188878474" 
                    target="_blank" 
                    class="btn-action" 
                    style="width: 100%; text-align: center; background: #00F3FF; color: #000; border: none; font-weight: bold;">
@@ -282,7 +282,8 @@
             btn.innerText = "TRANSMITTING...";
             btn.disabled = true;
 
-            const fbChatLink = "https://www.facebook.com/messages/e2ee/t/937239188878474text=Hi Abubakar! I just submitted a commission request for Digital Arc.";
+            // Updated Direct Encrypted Chat Link
+            const fbChatLink = "https://www.facebook.com/messages/e2ee/t/937239188878474";
 
             emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
                 service_type: currentSvc.toUpperCase(),
@@ -300,10 +301,8 @@
                 btn.disabled = false; 
                 btn.innerText = "Transmit Request";
 
-                // AUTO REDIRECT: Attempt to open the chat directly
-                // Note: Some mobile browsers block popups unless clicked, 
-                // but we trigger it here as the handshake finalization.
-                window.open(https:http.facebook.com/messages/e2ee/t/937239188878474, '_blank');
+                // AUTO REDIRECT: Attempt to open your direct chat
+                window.open(fbChatLink, '_blank');
 
             }).catch((err) => {
                 console.error("EmailJS Error:", err);
