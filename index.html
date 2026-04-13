@@ -51,8 +51,14 @@
         .ppt-studio .btn-action { background: #b8860b; }
         .tech-forge .btn-action { background: #1a6bb5; }
 
+        /* --- CONVICTION SECTION --- */
+        .conviction-section { background: #fff; padding: 80px 30px; border-top: 1px solid #ebebeb; border-bottom: 1px solid #ebebeb; }
+        .conviction-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; max-width: 1100px; margin: 40px auto 0; text-align: left; }
+        .conviction-item h4 { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; }
+        .conviction-item p { font-size: 11px; color: #888; line-height: 1.6; }
+
         /* --- PORTFOLIO ARCHIVE --- */
-        .portfolio-archive { background: #fff; padding: 100px 30px; border-top: 1px solid #ebebeb; text-align: center; }
+        .portfolio-archive { background: #fff; padding: 100px 30px; text-align: center; }
         .archive-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; max-width: 1100px; margin: 50px auto 0; }
         .project-card { background: #fafafa; border: 1px solid #eee; padding: 30px; text-align: left; transition: 0.3s; }
         .tag { font-size: 8px; letter-spacing: 2px; text-transform: uppercase; color: #bbb; display: block; margin-bottom: 10px; }
@@ -124,6 +130,32 @@
         </section>
     </div>
 
+    <section class="conviction-section">
+        <div style="max-width: 1100px; margin: 0 auto; text-align: center;">
+            <span class="tag">The Edge</span>
+            <h2 id="conviction-title" style="font-family:'Playfair Display'; font-size:32px; margin-top:10px;">Why Digital Arc?</h2>
+            
+            <div class="conviction-grid">
+                <div class="conviction-item">
+                    <h4 id="c1-t">01. Results First</h4>
+                    <p id="c1-p">I don't just make slides; I build decks that help you pass your defense or close business deals with authority.</p>
+                </div>
+                <div class="conviction-item">
+                    <h4 id="c2-t">02. Logic & UI</h4>
+                    <p id="c2-p">Specialized in bridging the gap between design and code. Systems that work perfectly and look professional.</p>
+                </div>
+                <div class="conviction-item">
+                    <h4 id="c3-t">03. Zero Risk</h4>
+                    <p id="c3-p">I provide a draft or mockup before you pay the full deposit. Your satisfaction is the absolute priority.</p>
+                </div>
+                <div class="conviction-item">
+                    <h4 id="c4-t">04. Human Support</h4>
+                    <p id="c4-p">No bots or generic emails. Direct Messenger access for real-time updates and collaboration on your build.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section class="portfolio-archive">
         <div style="font-size:10px; letter-spacing:5px; color:#ccc; text-transform:uppercase;">Work Archive</div>
         <h2 id="archive-title" style="font-family:'Playfair Display'; font-size:32px; margin-top:10px;">Selected Deployments</h2>
@@ -175,6 +207,11 @@
                 techDesc: "Full-stack web solutions using PHP and MySQL. I build functional student portals and registry systems.",
                 chat: "Consult via Messenger",
                 archiveTitle: "Selected Deployments",
+                convictionTitle: "Why Digital Arc?",
+                c1t: "01. Results First", c1p: "I don't just make slides; I build decks that help you pass your defense or close business deals with authority.",
+                c2t: "02. Logic & UI", c2p: "Specialized in bridging the gap between design and code. Systems that work perfectly and look professional.",
+                c3t: "03. Zero Risk", c3p: "I provide a draft or mockup before you pay the full deposit. Your satisfaction is the absolute priority.",
+                c4t: "04. Human Support", c4p: "No bots or generic emails. Direct Messenger access for real-time updates and collaboration on your build.",
                 p1: "A comprehensive Registry System built with CRUD operations and email notification integration.",
                 p2: "Structured SQL schema and functional inventory management for a digital cafe experience.",
                 p3: "Bespoke slide decks designed for corporate pitches and reports.",
@@ -187,6 +224,11 @@
                 techDesc: "Full-stack web solutions gamit ang PHP at MySQL. Gumagawa ako ng student portals at registry systems.",
                 chat: "Mag-chat sa Messenger",
                 archiveTitle: "Mga Nakaraang Proyekto",
+                convictionTitle: "Bakit Digital Arc?",
+                c1t: "01. Results First", c1p: "Hindi lang ito basta slide; gumagawa ako ng decks na makakatulong sa iyong defense o business deals.",
+                c2t: "02. Logic & UI", c2p: "Dalubhasa sa pag-combine ng disenyo at code. Mga system na maayos ang takbo at mukhang professional.",
+                c3t: "03. Zero Risk", c3p: "Magpapakita muna ako ng draft o mockup bago ang full deposit. Priyoridad ko ang iyong satisfaction.",
+                c4t: "04. Human Support", c4p: "Walang bots. Direktang Messenger access para sa real-time updates at pag-uusap tungkol sa iyong proyekto.",
                 p1: "Registry System na may CRUD operations at email notification integration.",
                 p2: "Maayos na SQL schema at inventory management para sa isang coffee shop.",
                 p3: "Slide decks na gawa para sa corporate pitches at mga reports.",
@@ -207,6 +249,14 @@
             document.getElementById('tech-desc').textContent = content[lang].techDesc;
             document.getElementById('chat-txt').textContent = content[lang].chat;
             document.getElementById('archive-title').textContent = content[lang].archiveTitle;
+            
+            // Conviction Text Switch
+            document.getElementById('conviction-title').textContent = content[lang].convictionTitle;
+            document.getElementById('c1-t').textContent = content[lang].c1t; document.getElementById('c1-p').textContent = content[lang].c1p;
+            document.getElementById('c2-t').textContent = content[lang].c2t; document.getElementById('c2-p').textContent = content[lang].c2p;
+            document.getElementById('c3-t').textContent = content[lang].c3t; document.getElementById('c3-p').textContent = content[lang].c3p;
+            document.getElementById('c4-t').textContent = content[lang].c4t; document.getElementById('c4-p').textContent = content[lang].c4p;
+
             document.getElementById('p1-desc').textContent = content[lang].p1;
             document.getElementById('p2-desc').textContent = content[lang].p2;
             document.getElementById('p3-desc').textContent = content[lang].p3;
@@ -225,7 +275,6 @@
             document.getElementById('modal-overlay').style.display = 'none';
         }
 
-        // Close modal if user clicks the dark background
         window.onclick = function(event) {
             if (event.target == document.getElementById('modal-overlay')) {
                 closeModal();
