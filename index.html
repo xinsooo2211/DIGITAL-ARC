@@ -3,159 +3,171 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>DIGITAL ARC | V2.0 PRO</title>
+    <title>DIGITAL ARC | ARCHITECT PROTOCOL</title>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <style>
-        /* --- CORE STYLING --- */
+        /* --- HIGH-FIDELITY CORE --- */
+        :root {
+            --accent: #00F3FF;
+            --gold: #D4AF37;
+            --bg: #050505;
+            --neumorphic-shadow: 20px 20px 60px #020202, -20px -20px 60px #0a0a0a;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; cursor: crosshair; }
         body, html { 
-            height: 100%; background: #000; color: #fff;
-            font-family: 'Courier New', Courier, monospace; overflow: hidden; 
+            height: 100%; background: var(--bg); color: #fff;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; 
+            overflow: hidden; 
         }
 
-        /* --- UI OVERLAYS --- */
-        .scanline {
+        /* --- CINEMATIC BOOT SEQUENCE --- */
+        #boot-wrapper {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%);
-            background-size: 100% 4px; z-index: 500; pointer-events: none; opacity: 0.15;
+            background: var(--bg); z-index: 2000; display: flex;
+            justify-content: center; align-items: center; transition: opacity 1.5s ease;
         }
 
-        .system-footer {
-            position: fixed; bottom: 35px; width: 100%; display: flex; 
-            justify-content: space-between; padding: 0 20px; z-index: 150;
-            font-size: 8px; letter-spacing: 1px; color: rgba(0, 243, 255, 0.5);
+        .neumorphic-glow {
+            position: absolute; width: 300px; height: 300px;
+            background: #080808; border-radius: 50%;
+            box-shadow: var(--neumorphic-shadow); filter: blur(30px);
+            animation: pulse-bg 4s infinite alternate;
         }
 
-        /* --- SPLIT UI --- */
-        .container { display: flex; width: 100%; height: 100vh; flex-direction: row; }
-        @media (max-width: 768px) { .container { flex-direction: column; } }
+        .terminal-loader {
+            position: relative; text-align: center; z-index: 10;
+        }
+
+        .type-zppsu {
+            font-size: clamp(2.5rem, 10vw, 6rem); font-weight: 900;
+            letter-spacing: 15px; color: #fff; text-transform: uppercase;
+            white-space: nowrap; overflow: hidden; width: 0;
+            border-right: 4px solid var(--accent);
+            text-shadow: 0 0 20px rgba(0, 243, 255, 0.5);
+            animation: 
+                typing 1.5s steps(5, end) forwards 0.5s,
+                blink-cursor 0.8s step-end infinite,
+                fade-out-boot 1s ease forwards 3.5s;
+        }
+
+        /* --- MAIN INTERFACE --- */
+        .main-ui {
+            opacity: 0; display: flex; width: 100%; height: 100vh;
+            animation: fade-in-ui 1.5s ease forwards 4s;
+        }
 
         .section {
             flex: 1; display: flex; flex-direction: column; justify-content: center;
-            align-items: center; position: relative; padding: 20px; transition: 0.5s;
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-        
-        .ppt-studio:hover { background: rgba(212, 175, 55, 0.05); }
-        .tech-forge:hover { background: rgba(0, 243, 255, 0.05); }
-
-        .archive-link {
-            font-size: 10px; color: #888; text-decoration: underline; 
-            margin-top: 15px; cursor: pointer; letter-spacing: 2px;
+            align-items: center; position: relative; padding: 40px;
+            border: 1px solid rgba(255,255,255,0.03); transition: 0.6s cubic-bezier(0.22, 1, 0.36, 1);
         }
 
-        h1 { font-size: clamp(1.5rem, 6vw, 4rem); letter-spacing: 8px; text-transform: uppercase; }
-        .ppt-studio h1 { color: #D4AF37; }
-        .tech-forge h1 { color: #00F3FF; }
+        .section:hover { background: rgba(255,255,255,0.02); }
+
+        h1 { 
+            font-size: clamp(1.2rem, 4vw, 3rem); font-weight: 200; 
+            letter-spacing: 10px; text-transform: uppercase; margin-bottom: 10px;
+        }
+
+        .ppt-studio h1 { color: var(--gold); }
+        .tech-forge h1 { color: var(--accent); }
 
         .btn-action {
             background: transparent; border: 1px solid currentColor; color: inherit;
-            padding: 10px 25px; text-transform: uppercase; letter-spacing: 2px;
-            font-size: 10px; cursor: pointer; margin-top: 20px;
+            padding: 12px 30px; text-transform: uppercase; letter-spacing: 3px;
+            font-size: 10px; cursor: pointer; margin-top: 30px; transition: 0.3s;
         }
+        .btn-action:hover { background: #fff; color: #000; }
+
+        /* --- UI ELEMENTS --- */
+        .scanline {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.05) 50%);
+            background-size: 100% 4px; z-index: 500; pointer-events: none;
+        }
+
+        .ticker {
+            position: fixed; bottom: 0; width: 100%; background: #000;
+            padding: 8px 0; border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        /* --- ANIMATIONS --- */
+        @keyframes typing { from { width: 0; } to { width: 100%; } }
+        @keyframes blink-cursor { from, to { border-color: transparent; } 50% { border-color: var(--accent); } }
+        @keyframes pulse-bg { from { transform: scale(0.95); opacity: 0.3; } to { transform: scale(1.1); opacity: 0.6; } }
+        @keyframes fade-out-boot { to { opacity: 0; transform: scale(1.1); visibility: hidden; } }
+        @keyframes fade-in-ui { to { opacity: 1; } }
 
         /* --- MODAL --- */
         #modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95); display: none; justify-content: center;
-            align-items: center; z-index: 600; backdrop-filter: blur(10px);
+            background: rgba(0,0,0,0.98); display: none; justify-content: center;
+            align-items: center; z-index: 1000; backdrop-filter: blur(20px);
         }
         .modal { 
-            background: #0a0a0a; border: 1px solid #333; width: 90%; max-width: 450px; 
-            padding: 25px; position: relative; box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
+            background: #080808; border: 1px solid #222; width: 90%; max-width: 450px; 
+            padding: 30px; position: relative;
         }
-
-        input, select, textarea { 
-            width: 100%; background: #000; border: 1px solid #333; padding: 12px; 
-            color: #fff; margin-bottom: 10px; font-size: 14px;
-        }
-
-        .char-counter { font-size: 9px; text-align: right; color: #555; margin-top: -8px; margin-bottom: 10px; }
-        .eta-badge { font-size: 9px; color: #00ff00; margin-bottom: 10px; letter-spacing: 1px; }
-
-        /* --- SUCCESS & QR --- */
+        textarea, input { width: 100%; background: #000; border: 1px solid #333; padding: 12px; color: #fff; margin-top: 10px; }
+        
         #success-msg { display: none; flex-direction: column; align-items: center; text-align: center; }
-        .qr-placeholder { width: 160px; height: 160px; background: #fff; margin: 15px 0; border: 4px solid #00F3FF; }
-
-        /* --- TICKER --- */
-        .ticker { position: fixed; bottom: 0; width: 100%; background: #000; border-top: 1px solid #111; padding: 5px 0; overflow: hidden; }
-        .ticker-content { display: inline-block; white-space: nowrap; font-size: 9px; color: #333; animation: scroll 40s linear infinite; }
-        @keyframes scroll { from { transform: translateX(100%); } to { transform: translateX(-100%); } }
     </style>
 </head>
 <body>
 
     <div class="scanline"></div>
 
-    <div class="system-footer">
-        <div>STATUS: ONLINE</div>
-        <div>ARCHITECT: ABUBAKAR</div>
-        <div>Uptime: 99.9%</div>
+    <div id="boot-wrapper">
+        <div class="neumorphic-glow"></div>
+        <div class="terminal-loader">
+            <div class="type-zppsu">ZPPSU</div>
+            <p style="font-size: 8px; letter-spacing: 5px; opacity: 0.4; margin-top: 20px;">INITIALIZING_DIGITAL_ARC_V2</p>
+        </div>
     </div>
 
-    <div class="container">
+    <main class="main-ui">
         <section class="section ppt-studio">
+            <p style="font-size: 8px; letter-spacing: 4px; color: rgba(255,255,255,0.4);">[ MODULE_01 ]</p>
             <h1>PPT Studio</h1>
-            <p style="font-size: 9px; color: #888;">VISUAL ARCHITECTURE</p>
-            <button class="btn-action" onclick="openModal('ppt')">Configure</button>
-            <a href="YOUR_PORTFOLIO_LINK" target="_blank" class="archive-link" onclick="playBeep()">[VIEW_PREVIOUS_LOGS]</a>
+            <button class="btn-action" onclick="openModal('ppt')">Access Studio</button>
         </section>
 
         <section class="section tech-forge">
+            <p style="font-size: 8px; letter-spacing: 4px; color: rgba(255,255,255,0.4);">[ MODULE_02 ]</p>
             <h1>Tech Forge</h1>
-            <p style="font-size: 9px; color: #888;">SYSTEM ENGINEERING</p>
-            <button class="btn-action" onclick="openModal('tech')">Initiate</button>
-            <a href="YOUR_PORTFOLIO_LINK" target="_blank" class="archive-link" onclick="playBeep()">[VIEW_SYSTEM_DEMOS]</a>
+            <button class="btn-action" onclick="openModal('tech')">Enter Forge</button>
         </section>
-    </div>
+    </main>
 
     <div class="ticker">
-        <div class="ticker-content">
-            // LATEST_FEEDBACK: "Clean SQL optimization" - Client_88 // SYSTEM_READY // LATEST_FEEDBACK: "Thesis deck was amazing" - Student_01 // GCASH_ACTIVE // PORTFOLIO_V2.0_LOADED //
-        </div>
+        <marquee style="font-size: 9px; letter-spacing: 2px; color: #444;">
+            // PHP_ENGINE: ACTIVE // SQL_STATUS: SECURE // MONGODB_LINK: ESTABLISHED // LATEST_CLIENT: "Excellent UI" // ABUBAKAR_BSIT_ZPPSU // 
+        </marquee>
     </div>
 
     <div id="modal-overlay">
         <div class="modal">
-            <button onclick="closeModal()" style="position:absolute; top:10px; right:15px; background:none; border:none; color:#fff; cursor:pointer;">[X]</button>
-            
+            <button onclick="closeModal()" style="position:absolute; top:15px; right:15px; background:none; border:none; color:#fff; cursor:pointer;">[X]</button>
             <div id="modal-content-wrapper">
-                <h3 id="modal-title" style="margin-bottom: 5px;">MODULE</h3>
-                <div class="eta-badge" id="eta-text">ETA: 3-5 BUSINESS DAYS</div>
-
+                <h2 id="modal-title" style="letter-spacing: 3px; font-weight: 200;">ORDER_REQUEST</h2>
                 <form id="orderForm" onsubmit="handleForm(event)">
-                    <input type="text" id="from_name" placeholder="CLIENT_ID (NAME)" required>
-                    <input type="email" id="reply_to" placeholder="CONTACT_EMAIL" required>
-                    
-                    <select id="package_tier" onchange="updateUI()">
-                        <option value="standard" data-price="250">Standard Protocol - ₱250</option>
-                        <option value="pro" data-price="500">Advanced Protocol - ₱500</option>
-                    </select>
-
-                    <textarea id="project_notes" placeholder="SYSTEM_SPECS: Describe features..." oninput="countChars(this)"></textarea>
-                    <div class="char-counter"><span id="current">0</span>/500 CHARS</div>
-
-                    <input type="tel" id="gcash_num" placeholder="GCASH_MOBILE (11-DIGIT)" pattern="[0-9]{11}" required>
-
-                    <div style="font-size: 1.2rem; margin-bottom: 15px; color: #00F3FF;">
-                        TOTAL: <span id="total-price">₱250</span>
-                    </div>
-
-                    <button type="submit" id="main-submit" class="btn-action" style="width: 100%; background: #00F3FF; color: #000;">Transmit Request</button>
+                    <input type="text" id="from_name" placeholder="CLIENT_NAME" required>
+                    <input type="email" id="reply_to" placeholder="EMAIL" required>
+                    <textarea id="project_notes" placeholder="SYSTEM_REQUIREMENTS..." required></textarea>
+                    <input type="tel" id="gcash_num" placeholder="GCASH_NUMBER (11 DIGITS)" pattern="[0-9]{11}" required>
+                    <p id="price-display" style="margin-top: 15px; color: var(--accent); font-weight: bold;">TOTAL: ₱250</p>
+                    <button type="submit" id="main-submit" class="btn-action" style="width: 100%; border-color: var(--accent); color: var(--accent);">TRANSMIT</button>
                 </form>
             </div>
 
             <div id="success-msg">
-                <h2 style="color:#00ff00;">HANDSHAKE_COMPLETE</h2>
-                <div class="qr-placeholder">
-                    <img src="YOUR_QR_IMAGE_URL" alt="GCash QR" style="width:100%">
+                <h3 style="color: #00ff00; letter-spacing: 2px;">HANDSHAKE_SUCCESS</h3>
+                <div style="width: 150px; height: 150px; background: #fff; margin: 20px auto;">
+                    <img src="YOUR_QR_URL_HERE" alt="QR" style="width:100%">
                 </div>
-                <p style="font-size: 10px; color: #00F3FF; margin-bottom: 5px;">ACCOUNT: ABUBAKAR K.</p>
-                <p style="font-size: 9px; opacity: 0.6; margin-bottom: 15px;">SCAN TO PAY DEPOSIT</p>
-                
-                <a id="manual-messenger-btn" href="https://m.me/61587460312431" target="_blank" class="btn-action" style="background: #00F3FF; color: #000; width: 100%; text-align: center;">
-                    Finalize via Messenger
-                </a>
+                <p style="font-size: 9px; margin-bottom: 20px;">SCAN TO PAY DEPOSIT TO: ABUBAKAR K.</p>
+                <a href="https://m.me/61587460312431" target="_blank" class="btn-action" style="background: var(--accent); color: #000; border: none; width: 100%; text-align: center; display: block;">FINALZE VIA MESSENGER</a>
             </div>
         </div>
     </div>
@@ -167,47 +179,20 @@
 
         (function() { emailjs.init(EMAILJS_PUBLIC_KEY); })();
 
-        // Audio Feedback
-        function playBeep() {
-            const context = new (window.AudioContext || window.webkitAudioContext)();
-            const osc = context.createOscillator();
-            const gain = context.createGain();
-            osc.type = "square";
-            osc.frequency.setValueAtTime(800, context.currentTime);
-            gain.gain.setValueAtTime(0.1, context.currentTime);
-            osc.connect(gain);
-            gain.connect(context.destination);
-            osc.start();
-            osc.stop(context.currentTime + 0.1);
-        }
+        let currentSvc = 'ppt';
 
         function openModal(svc) {
-            playBeep();
             currentSvc = svc;
             document.getElementById('modal-overlay').style.display = 'flex';
             document.getElementById('modal-content-wrapper').style.display = 'block';
             document.getElementById('success-msg').style.display = 'none';
-            document.getElementById('eta-text').innerText = svc === 'ppt' ? "ETA: 2-3 BUSINESS DAYS" : "ETA: 5-7 BUSINESS DAYS";
-            updateUI();
+            document.getElementById('price-display').innerText = svc === 'ppt' ? "TOTAL: ₱250" : "TOTAL: ₱500";
         }
 
-        function closeModal() {
-            document.getElementById('modal-overlay').style.display = 'none';
-        }
-
-        function countChars(obj) {
-            document.getElementById('current').innerText = obj.value.length;
-        }
-
-        function updateUI() {
-            const tierObj = document.getElementById('package_tier');
-            const price = tierObj.options[tierObj.selectedIndex].getAttribute('data-price');
-            document.getElementById('total-price').innerText = `₱${price}`;
-        }
+        function closeModal() { document.getElementById('modal-overlay').style.display = 'none'; }
 
         function handleForm(e) {
             e.preventDefault();
-            playBeep();
             const btn = document.getElementById('main-submit');
             btn.innerText = "TRANSMITTING...";
             btn.disabled = true;
@@ -216,18 +201,16 @@
                 service_type: currentSvc.toUpperCase(),
                 from_name: document.getElementById('from_name').value,
                 reply_to: document.getElementById('reply_to').value,
-                package_tier: document.getElementById('package_tier').value,
                 project_notes: document.getElementById('project_notes').value,
                 gcash_num: document.getElementById('gcash_num').value,
-                total_price: document.getElementById('total-price').innerText
+                total_price: document.getElementById('price-display').innerText
             }).then(() => {
                 document.getElementById('modal-content-wrapper').style.display = 'none';
                 document.getElementById('success-msg').style.display = 'flex';
                 setTimeout(() => { window.open("https://m.me/61587460312431", '_blank'); }, 2000);
             }).catch(() => {
-                alert("HANDSHAKE_FAILED. Check Connection.");
+                alert("TRANS_ERROR");
                 btn.disabled = false;
-                btn.innerText = "Transmit Request";
             });
         }
     </script>
