@@ -45,6 +45,23 @@
             text-transform: uppercase;
         }
 
+        /* --- LANGUAGE SWITCHER --- */
+        .lang-switch {
+            display: flex;
+            gap: 10px;
+        }
+        .lang-btn {
+            background: none;
+            border: none;
+            color: #ccc;
+            font-size: 9px;
+            letter-spacing: 1px;
+            cursor: pointer;
+            padding: 5px;
+            transition: color 0.3s;
+        }
+        .lang-btn.active { color: #111; font-weight: bold; }
+
         /* --- FLOATING CHAT TRIGGER --- */
         .floating-chat {
             position: fixed;
@@ -98,10 +115,11 @@
             justify-content: center;
             align-items: center;
             position: relative;
-            padding: 40px 30px;
+            padding: 40px 40px;
             transition: background 0.4s ease;
             border: 1px solid #ebebeb;
             overflow: hidden;
+            text-align: center;
         }
  
         .ppt-studio:hover { background: rgba(184, 134, 11, 0.04); }
@@ -109,11 +127,11 @@
  
         h1 {
             font-family: 'Playfair Display', serif;
-            font-size: clamp(2rem, 6vw, 3.8rem);
+            font-size: clamp(2rem, 5vw, 3.5rem);
             font-weight: 400;
             letter-spacing: 2px;
             text-transform: uppercase;
-            margin-bottom: 6px;
+            margin-bottom: 10px;
         }
         .ppt-studio h1 { color: #b8860b; }
         .tech-forge h1 { color: #1a6bb5; }
@@ -121,16 +139,26 @@
         .section-sub {
             font-size: 9px;
             letter-spacing: 4px;
-            color: #ccc;
+            color: #bbb;
             text-transform: uppercase;
-            margin-bottom: 32px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .service-desc {
+            max-width: 320px;
+            font-size: 12px;
+            line-height: 1.6;
+            color: #888;
+            margin-bottom: 30px;
+            letter-spacing: 0.5px;
         }
  
         .btn-action {
             background: #111;
             color: #fff;
             border: none;
-            padding: 12px 34px;
+            padding: 14px 40px;
             font-size: 9px;
             letter-spacing: 3px;
             text-transform: uppercase;
@@ -214,45 +242,55 @@
  
     <div class="sys-bar">
         <div>DIGITAL ARC · V2.0 PRO</div>
-        <div>AVAILABILITY: BESPOKE COMMISSIONS</div>
+        <div class="lang-switch">
+            <button class="lang-btn active" onclick="switchLang('en')">EN</button>
+            <span style="color:#eee">|</span>
+            <button class="lang-btn" onclick="switchLang('tl')">TL</button>
+        </div>
     </div>
 
     <a href="https://m.me/61587460312431" target="_blank" class="floating-chat">
         <span class="chat-dot"></span>
-        <span class="chat-text">Consult via Messenger</span>
+        <span class="chat-text" id="chat-txt">Consult via Messenger</span>
     </a>
  
     <div class="container">
         <section class="section ppt-studio">
+            <div class="section-sub">Module 01</div>
             <h1>PPT Studio</h1>
-            <p class="section-sub">Narrative Design</p>
-            <button class="btn-action" onclick="openModal('ppt')">Start Brief</button>
+            <p class="service-desc" id="ppt-desc">
+                High-end presentation decks for academic thesis or corporate pitches. I focus on visual hierarchy, clean data visualization, and professional layouts.
+            </p>
+            <button class="btn-action" id="ppt-btn" onclick="openModal('ppt')">Start Brief</button>
         </section>
  
         <section class="section tech-forge">
+            <div class="section-sub">Module 02</div>
             <h1>Tech Forge</h1>
-            <p class="section-sub">Web Engineering</p>
-            <button class="btn-action" onclick="openModal('tech')">Initiate Build</button>
+            <p class="service-desc" id="tech-desc">
+                Full-stack web solutions using PHP and MySQL. I build functional student portals, registry systems, and specialized business catalogs with secure backends.
+            </p>
+            <button class="btn-action" id="tech-btn" onclick="openModal('tech')">Initiate Build</button>
         </section>
     </div>
  
     <div id="modal-overlay">
         <div class="modal">
             <h3 id="modal-title">Module</h3>
-            <p style="font-size: 10px; color: #888; margin-bottom: 30px; letter-spacing: 1px;">Fill out the brief. We will discuss the package tier and pricing via Messenger once transmitted.</p>
+            <p id="modal-sub" style="font-size: 10px; color: #888; margin-bottom: 30px; letter-spacing: 1px;">Fill out the brief. We will discuss the package tier and pricing via Messenger once transmitted.</p>
  
             <form id="orderForm" onsubmit="handleForm(event)">
-                <label class="field-label">Name</label>
-                <input type="text" id="from_name" placeholder="Name or Organization" required>
+                <label class="field-label" id="label-name">Name</label>
+                <input type="text" id="from_name" placeholder="..." required>
  
-                <label class="field-label">Contact Email</label>
+                <label class="field-label" id="label-email">Contact Email</label>
                 <input type="email" id="reply_to" placeholder="email@address.com" required>
  
-                <label class="field-label">Project Brief</label>
-                <textarea id="project_notes" placeholder="Tell me about what you need to build..." required></textarea>
+                <label class="field-label" id="label-brief">Project Brief</label>
+                <textarea id="project_notes" placeholder="..." required></textarea>
  
                 <button type="submit" id="main-submit">Transmit & Open Chat</button>
-                <button type="button" onclick="closeModal()" style="width:100%; background:none; border:none; color:#ccc; font-size:8px; letter-spacing:2px; margin-top:20px; cursor:pointer; text-transform:uppercase;">Cancel Request</button>
+                <button type="button" id="btn-cancel" onclick="closeModal()" style="width:100%; background:none; border:none; color:#ccc; font-size:8px; letter-spacing:2px; margin-top:20px; cursor:pointer; text-transform:uppercase;">Cancel Request</button>
             </form>
         </div>
     </div>
@@ -262,13 +300,66 @@
         const EMAILJS_SERVICE_ID = "service_50mw7el";
         const EMAILJS_TEMPLATE_ID = "template_f1i8toh";
         let currentSvc = 'ppt';
+        let currentLang = 'en';
+
+        const content = {
+            en: {
+                pptDesc: "High-end presentation decks for academic thesis or corporate pitches. I focus on visual hierarchy, clean data visualization, and professional layouts.",
+                techDesc: "Full-stack web solutions using PHP and MySQL. I build functional student portals, registry systems, and specialized business catalogs with secure backends.",
+                pptBtn: "Start Brief",
+                techBtn: "Initiate Build",
+                chat: "Consult via Messenger",
+                modalSub: "Fill out the brief. We will discuss the package tier and pricing via Messenger once transmitted.",
+                labelName: "Name",
+                labelEmail: "Contact Email",
+                labelBrief: "Project Brief",
+                btnSubmit: "Transmit & Open Chat",
+                btnCancel: "Cancel Request",
+                pptTitle: "PPT Brief",
+                techTitle: "Tech Build"
+            },
+            tl: {
+                pptDesc: "De-kalidad na presentation decks para sa thesis o corporate pitches. Nakatutok ako sa maayos na visual hierarchy at professional layouts.",
+                techDesc: "Full-stack web solutions gamit ang PHP at MySQL. Gumagawa ako ng student portals, registry systems, at business catalogs na may secure backend.",
+                pptBtn: "Simulan ang Brief",
+                techBtn: "Simulan ang Build",
+                chat: "Mag-chat sa Messenger",
+                modalSub: "Pakisagutan ang brief. Pag-uusapan natin ang package tier at presyo sa Messenger pagkatapos i-send ito.",
+                labelName: "Pangalan",
+                labelEmail: "Contact Email",
+                labelBrief: "Detalye ng Proyekto",
+                btnSubmit: "Ipadala at Mag-chat",
+                btnCancel: "I-cancel ang Request",
+                pptTitle: "PPT Briefing",
+                techTitle: "Tech Pagbuo"
+            }
+        };
  
         (function() { emailjs.init(EMAILJS_PUBLIC_KEY); })();
+
+        function switchLang(lang) {
+            currentLang = lang;
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            document.getElementById('ppt-desc').textContent = content[lang].pptDesc;
+            document.getElementById('tech-desc').textContent = content[lang].techDesc;
+            document.getElementById('ppt-btn').textContent = content[lang].pptBtn;
+            document.getElementById('tech-btn').textContent = content[lang].techBtn;
+            document.getElementById('chat-txt').textContent = content[lang].chat;
+            document.getElementById('modal-sub').textContent = content[lang].modalSub;
+            document.getElementById('label-name').textContent = content[lang].labelName;
+            document.getElementById('label-email').textContent = content[lang].labelEmail;
+            document.getElementById('label-brief').textContent = content[lang].labelBrief;
+            document.getElementById('main-submit').textContent = content[lang].btnSubmit;
+            document.getElementById('btn-cancel').textContent = content[lang].btnCancel;
+        }
  
         function openModal(svc) {
             currentSvc = svc;
             document.getElementById('modal-overlay').style.display = 'flex';
-            document.getElementById('modal-title').textContent = svc === 'ppt' ? 'PPT Brief' : 'Tech Build';
+            const titleKey = svc === 'ppt' ? 'pptTitle' : 'techTitle';
+            document.getElementById('modal-title').textContent = content[currentLang][titleKey];
         }
  
         function closeModal() {
@@ -278,7 +369,7 @@
         function handleForm(e) {
             e.preventDefault();
             const btn = document.getElementById('main-submit');
-            btn.textContent = 'TRANSMITTING...';
+            btn.textContent = currentLang === 'en' ? 'TRANSMITTING...' : 'IPINAPADALA...';
             btn.disabled = true;
  
             emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
@@ -288,10 +379,8 @@
                 project_notes: document.getElementById('project_notes').value,
                 status: "CHAT_PENDING"
             }).then(() => {
-                // Success - Redirect to Messenger
                 window.location.href = "https://m.me/61587460312431";
             }).catch(() => {
-                alert("Transmission failed. Redirecting to chat...");
                 window.location.href = "https://m.me/61587460312431";
             });
         }
