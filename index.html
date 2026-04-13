@@ -6,7 +6,7 @@
     <title>DIGITAL ARC | DUAL PROTOCOL</title>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <style>
-        /* --- MOBILE-FIRST CORE STYLING --- */
+        /* --- CORE STYLING --- */
         * { margin: 0; padding: 0; box-sizing: border-box; cursor: crosshair; -webkit-tap-highlight-color: transparent; }
         body, html { 
             height: 100%; 
@@ -47,7 +47,7 @@
             display: inline-block; margin-right: 6px; box-shadow: 0 0 8px #00ff00;
         }
 
-        /* --- SPLIT UI (MOBILE RESPONSIVE) --- */
+        /* --- SPLIT UI --- */
         .container { display: flex; width: 100%; height: 100vh; flex-direction: row; }
         
         @media (max-width: 768px) {
@@ -126,7 +126,7 @@
     <div class="scanline"></div>
 
     <div class="system-footer">
-        <div><span class="status-dot"></span> ACTIVE</div>
+        <div><span class="status-dot"></span> ONLINE</div>
         <div>WEBDEV: ABUBAKAR // BSIT</div>
         <div>STUDENT AT ZPPSU</div>
     </div>
@@ -189,11 +189,20 @@
 
             <div id="success-msg">
                 <h2 id="success-header">COMPLETE</h2>
+                <p style="text-align:center; padding: 10px; font-size: 0.8rem; opacity: 0.8;">
+                    System specs transmitted. Verification required.
+                </p>
                 <div class="qr-placeholder">
-                    <img src="https://via.placeholder.com/180?text=SCAN+GCASH" alt="GCash QR" style="width:100%">
+                    <img src="YOUR_GCASH_QR_URL" alt="GCash QR" style="width:100%">
                 </div>
                 <p style="opacity: 0.5; font-size: 0.7rem; text-align: center; margin-bottom: 15px;">SCAN TO PAY DEPOSIT</p>
-                <a href="https://m.me/YOUR_FB_LINK" target="_blank" class="btn-action" style="width: 100%; text-align: center; background: #00F3FF; color: #000; border: none;">Message Abubakar</a>
+                
+                <a href="https://www.facebook.com/profile.php?id=61587460312431=Hi Abubakar! I just submitted a commission request for Digital Arc." 
+                   target="_blank" 
+                   class="btn-action" 
+                   style="width: 100%; text-align: center; background: #00F3FF; color: #000; border: none;">
+                   Finalize via Messenger
+                </a>
             </div>
         </div>
     </div>
@@ -213,44 +222,18 @@
             ppt: { 
                 color: '#D4AF37', 
                 list: { 
-                    standard: [
-                        '10-15 Visual Slides', 
-                        'Custom Graphic Elements', 
-                        'Infographic Integration', 
-                        'Clean Layout Design'
-                    ], 
-                    pro: [
-                        'Full Thesis Defense Deck', 
-                        'Pitch Deck Architecture', 
-                        'Custom Animations/Transitions', 
-                        'Source File (PPTX) + PDF Export'
-                    ] 
+                    standard: ['10-15 Visual Slides', 'Custom Graphic Elements', 'Infographic Integration', 'Clean Layout Design'], 
+                    pro: ['Full Thesis Defense Deck', 'Pitch Deck Architecture', 'Custom Animations/Transitions', 'Source File (PPTX) + PDF Export'] 
                 },
-                desc: { 
-                    standard: 'Professional visual structure for reports and academic tasks.', 
-                    pro: 'Premium visual architecture for high-stakes defenses and business pitches.' 
-                }
+                desc: { standard: 'Professional visual structure for reports and academic tasks.', pro: 'Premium visual architecture for high-stakes defenses and business pitches.' }
             },
             tech: { 
                 color: '#00F3FF', 
                 list: { 
-                    standard: [
-                        'PHP / MySQL CRUD System', 
-                        'Student Registry Module', 
-                        'Database Connection Setup', 
-                        'Mobile Responsive Interface'
-                    ], 
-                    pro: [
-                        'Online Enrollment System', 
-                        'Full Admin Dashboard', 
-                        'NoSQL Integration (MongoDB)', 
-                        'System Engineering & Deployment'
-                    ] 
+                    standard: ['PHP / MySQL CRUD System', 'Student Registry Module', 'Database Connection Setup', 'Mobile Responsive Interface'], 
+                    pro: ['Online Enrollment System', 'Full Admin Dashboard', 'NoSQL Integration (MongoDB)', 'System Engineering & Deployment'] 
                 },
-                desc: { 
-                    standard: 'Functional registry and tracking systems built with structured SQL.', 
-                    pro: 'Complex system engineering including multiple modules and cloud database sync.' 
-                }
+                desc: { standard: 'Functional registry and tracking systems built with structured SQL.', pro: 'Complex system engineering including multiple modules and cloud database sync.' }
             }
         };
 
@@ -266,6 +249,7 @@
         function closeModal() {
             document.getElementById('modal-overlay').style.display = 'none';
             document.getElementById('success-msg').style.display = 'none';
+            document.getElementById('orderForm').style.display = 'block';
             document.body.style.overflow = 'auto';
         }
 
@@ -285,7 +269,7 @@
             list.innerHTML = '';
             s.list[tier].forEach(item => {
                 const li = document.createElement('li');
-                li.innerText = `[+] ${item}`;
+                li.innerText = `> ${item}`;
                 list.appendChild(li);
             });
         }
@@ -306,8 +290,9 @@
                 gcash_num: document.getElementById('gcash_num').value,
                 total_price: document.getElementById('total-price').innerText
             }).then(() => {
+                document.getElementById('orderForm').style.display = 'none';
                 document.getElementById('success-msg').style.display = 'flex';
-                btn.disabled = false; btn.innerText = "Done";
+                btn.disabled = false; btn.innerText = "Transmit Request";
             }).catch(() => {
                 alert("Transmission error. Check your connection.");
                 btn.disabled = false;
