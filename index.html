@@ -6,7 +6,7 @@
     <title>DIGITAL ARC | DUAL PROTOCOL</title>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <style>
-        /* --- MOBILE-FIRST CORE STYLING --- */
+        /* --- CORE STYLING --- */
         * { margin: 0; padding: 0; box-sizing: border-box; cursor: crosshair; -webkit-tap-highlight-color: transparent; }
         body, html { 
             height: 100%; 
@@ -92,6 +92,7 @@
         }
 
         .deliverables-box { background: rgba(255,255,255,0.03); padding: 15px; margin-bottom: 20px; border-left: 2px solid; }
+        .deliverables-box h4 { font-size: 10px; letter-spacing: 2px; color: rgba(255,255,255,0.3); margin-bottom: 10px; text-transform: uppercase; }
         .deliverables-box li { list-style: none; margin-bottom: 5px; font-size: 0.8rem; opacity: 0.7; }
 
         input, select, textarea { 
@@ -126,8 +127,8 @@
 
     <div class="system-footer">
         <div><span class="status-dot"></span> ACTIVE</div>
-        <div>WEBDEV: ABUBAKAR</div>
-        <div>BSIT STUDENT AT ZPPSU</div>
+        <div>WEBDEV: ABUBAKAR // BSIT</div>
+        <div>STUDENT AT ZPPSU/div>
     </div>
 
     <div class="container">
@@ -146,7 +147,7 @@
 
     <div class="ticker">
         <div class="ticker-content">
-            // STATUS: SECURE // LOCATION: ZAMBOANGA CITY // WEBDEV: ABUBAKAR // READY FOR UPLOAD...
+            // SQL_STATUS: CONNECTED // PHP_ENGINE: OPTIMIZED // MONGODB_CLUSTER: ACTIVE // UI/UX_PROTOCOL: ENGAGED // ENROLLMENT_MODULE: READY...
         </div>
     </div>
 
@@ -156,30 +157,31 @@
             <h2 id="modal-title" style="letter-spacing: 3px; font-weight: 100; margin-bottom: 15px; text-transform: uppercase;">MODULE</h2>
             
             <div id="details" class="deliverables-box">
+                <h4>System Deliverables:</h4>
                 <ul id="deliverables-list"></ul>
             </div>
 
             <form id="orderForm" onsubmit="handleForm(event)">
-                <input type="text" id="from_name" placeholder="FULL NAME" required>
+                <input type="text" id="from_name" placeholder="CLIENT NAME / BRAND" required>
                 <input type="email" id="reply_to" placeholder="EMAIL ADDRESS" required>
                 
                 <select id="package_tier" onchange="updateUI()">
-                    <option value="standard" data-price="300">Standard — ₱300</option>
-                    <option value="pro" data-price="1000">Advanced — ₱1000</option>
+                    <option value="standard">Standard Protocol</option>
+                    <option value="pro">Advanced Protocol (Full System)</option>
                 </select>
                 <p id="tier-description" class="tier-desc"></p>
 
                 <select id="style_type" required>
-                    <option value="minimalist">Minimalist</option>
-                    <option value="cyber">Cyberpunk/Dark</option>
-                    <option value="corporate">Professional</option>
+                    <option value="minimalist">Minimalist / Clean</option>
+                    <option value="cyber">Cyberpunk / High-Tech</option>
+                    <option value="corporate">Professional / Corporate</option>
                 </select>
 
-                <textarea id="project_notes" placeholder="Tell me what you need..."></textarea>
-                <input type="tel" id="gcash_num" placeholder="GCASH (11 DIGITS)" pattern="[0-9]{11}" required>
+                <textarea id="project_notes" placeholder="SPECIFICATIONS: Describe your required features or design style..."></textarea>
+                <input type="tel" id="gcash_num" placeholder="GCASH NUMBER (11 DIGITS)" pattern="[0-9]{11}" required>
 
-                <div style="font-size: 1.5rem; margin: 15px 0; font-weight: bold;">
-                    TOTAL: <span id="total-price">₱0</span>
+                <div style="font-size: 1.2rem; margin: 15px 0; font-weight: bold; color: #888;">
+                    ESTIMATED TOTAL: <span id="total-price" style="color:#fff;">₱0</span>
                 </div>
 
                 <button type="submit" id="main-submit" class="btn-action" style="width: 100%; border-width: 2px; background: #fff; color: #000;">Transmit Request</button>
@@ -188,10 +190,10 @@
             <div id="success-msg">
                 <h2 id="success-header">COMPLETE</h2>
                 <div class="qr-placeholder">
-                    <img src="https://via.placeholder.com/180?text=SCAN+GCASH" alt="GCash QR" style="width:100%">
+                    <img src="https://via.placeholder.com/180?text=SCAN+TO+PAY" alt="GCash QR" style="width:100%">
                 </div>
                 <p style="opacity: 0.5; font-size: 0.7rem; text-align: center; margin-bottom: 15px;">SCAN TO PAY DEPOSIT</p>
-                <a href="https://www.facebook.com/profile.php?id=61587460312431" class="btn-action" style="width: 100%; text-align: center; background: #00F3FF; color: #000; border: none;">Message Abubakar</a>
+                <a href="https://m.me/YOUR_FB_LINK" class="btn-action" style="width: 100%; text-align: center; background: #00F3FF; color: #000; border: none;">Message Abubakar</a>
             </div>
         </div>
     </div>
@@ -211,18 +213,20 @@
             ppt: { 
                 color: '#D4AF37', 
                 list: { 
-                    standard: ['10 Clean Slides', 'Standard Layout', '48hr Delivery'], 
-                    pro: ['25+ Advanced Slides', 'Custom Graphics', 'Source Files'] 
+                    standard: ['10-15 Visual Slides', 'Custom Infographics', 'Data Charts Integration', 'Standard Layout'], 
+                    pro: ['Full Thesis/Pitch Deck', 'Custom Graphic Assets', 'Source Files (PPTX/PDF)', 'High-End Animations'] 
                 },
-                desc: { standard: 'Academic/Basic use.', pro: 'Business/Premium use.' }
+                price: { standard: '250', pro: '500' },
+                desc: { standard: 'Clean visual structure for reports and academic tasks.', pro: 'Advanced visual architecture for high-stakes presentations.' }
             },
             tech: { 
                 color: '#00F3FF', 
                 list: { 
-                    standard: ['Landing Page', 'Mobile Responsive', '3-Day Build'], 
-                    pro: ['Full System', 'Database Integration', 'Priority Build'] 
+                    standard: ['PHP/MySQL CRUD System', 'Student Registry Module', 'Mobile Responsive UI', 'Basic Database Setup'], 
+                    pro: ['Online Enrollment System', 'Full Admin Dashboard', 'NoSQL Integration (MongoDB)', 'Custom Web System Build'] 
                 },
-                desc: { standard: 'Simple Portfolio.', pro: 'Complex Web System.' }
+                price: { standard: '250', pro: '500' },
+                desc: { standard: 'Functional database systems for small-scale registry/tracking.', pro: 'Complex system engineering with multiple modules and secure backend.' }
             }
         };
 
@@ -244,9 +248,9 @@
         function updateUI() {
             const s = data[currentSvc];
             const tier = document.getElementById('package_tier').value;
-            const price = document.getElementById('package_tier').options[document.getElementById('package_tier').selectedIndex].getAttribute('data-price');
+            const price = s.price[tier];
             
-            document.getElementById('modal-title').innerText = currentSvc.toUpperCase();
+            document.getElementById('modal-title').innerText = currentSvc === 'ppt' ? 'Visual Architecture' : 'System Engineering';
             document.getElementById('modal-title').style.color = s.color;
             document.getElementById('total-price').innerText = `₱${price}`;
             document.getElementById('details').style.borderLeftColor = s.color;
@@ -256,7 +260,7 @@
             list.innerHTML = '';
             s.list[tier].forEach(item => {
                 const li = document.createElement('li');
-                li.innerText = `> ${item}`;
+                li.innerText = `[+] ${item}`;
                 list.appendChild(li);
             });
         }
@@ -264,7 +268,7 @@
         function handleForm(e) {
             e.preventDefault();
             const btn = document.getElementById('main-submit');
-            btn.innerText = "SENDING...";
+            btn.innerText = "TRANSMITTING...";
             btn.disabled = true;
 
             emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
@@ -273,14 +277,14 @@
                 reply_to: document.getElementById('reply_to').value,
                 package_tier: document.getElementById('package_tier').value,
                 visual_style: document.getElementById('style_type').value,
-                project_notes: document.getElementById('project_notes').value || "None",
+                project_notes: document.getElementById('project_notes').value || "None provided",
                 gcash_num: document.getElementById('gcash_num').value,
                 total_price: document.getElementById('total-price').innerText
             }).then(() => {
                 document.getElementById('success-msg').style.display = 'flex';
                 btn.disabled = false; btn.innerText = "Done";
             }).catch(() => {
-                alert("Failed. Check Connection.");
+                alert("Transmission error. Check your connection.");
                 btn.disabled = false;
             });
         }
